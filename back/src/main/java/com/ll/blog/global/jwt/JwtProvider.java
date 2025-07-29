@@ -26,6 +26,7 @@ public class JwtProvider {
     public void init() {
         // 고정된 secretKey 설정
         this.secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+        System.out.println("✅ secretKey initialized: " + (secretKey != null));
     }
 
     public String generateToken(String username) {

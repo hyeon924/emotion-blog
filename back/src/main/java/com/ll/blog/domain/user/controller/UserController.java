@@ -32,11 +32,19 @@ public class UserController {
     //    로그인
     @PostMapping("/login")
     public ResponseEntity<StandardApiResponse<String>> login(@RequestBody LoginRequest request) {
-        String token = userService.login(request);
-        return ResponseEntity.ok(StandardApiResponse.success("로그인 성공", token));
+        try {
+            String token = userService.login(request);
+            return ResponseEntity.ok(StandardApiResponse.success("로그인 성공", token));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(StandardApiResponse.error(e.getMessage()));
+        } catch (Exception e) {
+            e.printStackTrace(); // Railway에서 로그 확인 가능
+            return ResponseEntity.internalServerError().body(StandardApiResponse.error("로그인 중 서버 오류가 발생했습니다."));
+        }
     }
 
-//    이메일 전송용 컨트롤러
+
+    //    이메일 전송용 컨트롤러
     @PostMapping("/me/request-verification-code")
     public ResponseEntity<StandardApiResponse<Void>> sendDeleteVerificationCode() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName(); // username이 email이라고 가정
@@ -44,7 +52,7 @@ public class UserController {
         return ResponseEntity.ok(StandardApiResponse.success("탈퇴 인증번호 전송 완료"));
     }
 
-//    탈퇴
+    //    탈퇴
     @DeleteMapping("/me")
     public ResponseEntity<StandardApiResponse<Void>> deleteUser(@RequestBody DeleteUserRequest request) {
         userService.deleteCurrentUser(request.getCode());
