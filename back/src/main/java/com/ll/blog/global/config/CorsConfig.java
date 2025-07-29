@@ -14,10 +14,13 @@ public class CorsConfig {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000")); // ✅ 프론트 주소 허용
+        config.setAllowedOrigins(List.of(
+                "http://localhost:3000",
+                "https://emotion-blog.vercel.app"  // ✅ 이 부분 추가
+        ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true); // 인증 정보 포함 여부
+        config.setAllowCredentials(true); // 쿠키 등 인증 정보 포함 허용
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
