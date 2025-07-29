@@ -35,7 +35,7 @@ export default function PostListPage() {
       return;
     }
 
-    fetch('http://localhost:8080/api/v1/posts', {
+    fetch('https://emotion-blog-production.up.railway.app/api/v1/posts', {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(async (res) => {

@@ -26,7 +26,7 @@ export default function PostDetailPage() {
       return;
     }
 
-    fetch(`http://localhost:8080/api/v1/posts/${id}`, {
+    fetch(`https://emotion-blog-production.up.railway.app/api/v1/posts/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -55,7 +55,7 @@ export default function PostDetailPage() {
     if (!confirm('정말 삭제하시겠습니까?')) return;
     const token = localStorage.getItem('token');
     try {
-      const res = await fetch(`http://localhost:8080/api/v1/posts/${id}`, {
+      const res = await fetch(`https://emotion-blog-production.up.railway.app/api/v1/posts/${id}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,

@@ -10,7 +10,7 @@ export default function PostWritePage() {
     const token = localStorage.getItem('token');
 
     try {
-      const res = await fetch('http://localhost:8080/api/v1/posts', {
+      const res = await fetch('https://emotion-blog-production.up.railway.app/api/v1/posts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

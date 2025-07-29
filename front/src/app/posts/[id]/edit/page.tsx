@@ -16,7 +16,7 @@ export default function PostEditPage() {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    fetch(`http://localhost:8080/api/v1/posts/${id}`, {
+    fetch(`https://emotion-blog-production.up.railway.app/api/v1/posts/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(async (res) => {
@@ -34,7 +34,7 @@ export default function PostEditPage() {
     const token = localStorage.getItem('token');
 
     try {
-      const res = await fetch(`http://localhost:8080/api/v1/posts/${id}`, {
+      const res = await fetch(`https://emotion-blog-production.up.railway.app/api/v1/posts/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

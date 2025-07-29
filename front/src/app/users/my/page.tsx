@@ -15,7 +15,7 @@ export default function MyPage() {
       return;
     }
 
-    fetch('http://localhost:8080/my', {
+    fetch('https://emotion-blog-production.up.railway.app/my', {
       headers: {
         Authorization: `Bearer ${token}`,
       },

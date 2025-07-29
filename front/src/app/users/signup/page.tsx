@@ -17,7 +17,7 @@ export default function SignupPage() {
     setError('');
 
     try {
-      const res = await fetch('http://localhost:8080/users/signup', {
+      const res = await fetch('https://emotion-blog-production.up.railway.app/users/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ export default function SignupPage() {
   const handleSendCode = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/email/request-verification-code?email=${username}`,
+        `https://emotion-blog-production.up.railway.app/email/request-verification-code?email=${username}`,
         {
           method: 'POST',
         }
