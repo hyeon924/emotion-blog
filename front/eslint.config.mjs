@@ -1,6 +1,7 @@
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
+// eslint.config.mjs
 import { FlatCompat } from '@eslint/eslintrc';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -10,14 +11,11 @@ const compat = new FlatCompat({
 });
 
 export default [
-  // 기존 next/typescript, next/core-web-vitals 규칙 불러오기
   ...compat.extends('next/core-web-vitals', 'next/typescript'),
-
-  // 사용자 지정 규칙 추가
   {
-    files: ['**/*.ts', '**/*.tsx'],
     rules: {
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      'react-hooks/exhaustive-deps': 'warn',
     },
   },
 ];

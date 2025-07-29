@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 
 interface Post {
   id: number;
@@ -47,7 +46,7 @@ export default function PostListPage() {
         setNickname(data.data.nickname);
       })
       .catch((err) => setError(err.message));
-  }, []);
+  }, [router]);
 
   const filteredPosts = posts.filter((post) => {
     const matchesSearch =

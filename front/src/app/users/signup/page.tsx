@@ -34,7 +34,7 @@ export default function SignupPage() {
 
       alert('회원가입 성공! 로그인 페이지로 이동합니다.');
       router.push('/users/login');
-    } catch (_) {
+    } catch {
       setError('서버 오류');
     }
   };
