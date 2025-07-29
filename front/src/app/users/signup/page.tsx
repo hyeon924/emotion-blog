@@ -5,12 +5,53 @@ import { useRouter } from 'next/navigation';
 
 export default function SignupPage() {
   const router = useRouter();
-  const [username, setUsername] = useState('');
-  const [nickname, setNickname] = useState('');
+  const [emailId, setEmailId] = useState('');
+  const [domainSelect, setDomainSelect] = useState('');
+  const [customDomain, setCustomDomain] = useState('');
+  const [showCustomDomain, setShowCustomDomain] = useState(false);
+  const domainOptions = ['gmail.com', 'naver.com', 'daum.net', '직접 입력'];
   const [password, setPassword] = useState('');
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [sendComplete, setSendComplete] = useState(false);
+  const [username, setUsername] = useState('');
+  const [nickname, setNickname] = useState('');
+
+  // username은 emailId와 domainSelect/customDomain을 합쳐서 관리
+  // 기존 username 관련 인풋/로직 제거
+
+  const handleEmailIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmailId(e.target.value);
+    const domain = showCustomDomain ? customDomain : domainSelect;
+    setUsername(e.target.value && domain ? `${e.target.value}@${domain}` : '');
+  };
+
+  const handleDomainSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    setDomainSelect(value);
+    if (value === '직접 입력') {
+      setShowCustomDomain(true);
+      setCustomDomain('');
+      setUsername(emailId ? `${emailId}@` : '');
+    } else {
+      setShowCustomDomain(false);
+      setCustomDomain('');
+      setUsername(emailId && value ? `${emailId}@${value}` : '');
+    }
+  };
+
+  const handleCustomDomainChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCustomDomain(e.target.value);
+    setUsername(emailId && e.target.value ? `${emailId}@${e.target.value}` : '');
+  };
+
+  const handleCustomDomainBlur = () => {
+    if (!customDomain) {
+      setShowCustomDomain(false);
+      setDomainSelect('');
+      setUsername('');
+    }
+  };
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,18 +108,44 @@ export default function SignupPage() {
         <form onSubmit={handleSignup} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">이메일</label>
-            <div className="flex gap-2">
+            <div className="flex gap-2 mb-2 flex-nowrap w-full min-w-0 overflow-x-visible">
               <input
-                type="email"
-                placeholder="이메일을 입력하세요"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+                type="text"
+                placeholder="이메일 아이디"
+                value={emailId}
+                onChange={handleEmailIdChange}
+                className="w-[180px] min-w-0 border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
               />
+              <span className="self-center">@</span>
+              {showCustomDomain ? (
+                <input
+                  type="text"
+                  placeholder="example.com"
+                  value={customDomain}
+                  onChange={handleCustomDomainChange}
+                  onBlur={handleCustomDomainBlur}
+                  autoFocus
+                  className="w-[180px] min-w-0 border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+                />
+              ) : (
+                <select
+                  className="w-[180px] min-w-0 border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+                  value={domainSelect}
+                  onChange={handleDomainSelect}
+                >
+                  <option value="" disabled>
+                    도메인 선택
+                  </option>
+                  {domainOptions.map((domain) => (
+                    <option key={domain} value={domain}>
+                      {domain}
+                    </option>
+                  ))}
+                </select>
+              )}
               <button
                 type="button"
-                className="bg-green-500 text-white text-sm px-4 py-2 rounded hover:bg-green-600 transition font-medium whitespace-nowrap"
-                style={{ minWidth: '110px' }}
+                className="bg-green-500 text-white text-sm px-4 py-2 rounded hover:bg-green-600 transition font-medium whitespace-nowrap flex-shrink-0 min-w-[110px]"
                 onClick={handleSendCode}
                 disabled={sendComplete}
               >

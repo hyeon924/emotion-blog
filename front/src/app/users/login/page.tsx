@@ -7,6 +7,11 @@ export default function LoginPage() {
   const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [emailId, setEmailId] = useState('');
+  const [domainSelect, setDomainSelect] = useState('');
+  const [customDomain, setCustomDomain] = useState('');
+  const [showCustomDomain, setShowCustomDomain] = useState(false);
+  const domainOptions = ['gmail.com', 'naver.com', 'daum.net', '직접 입력'];
 
   const handleLogin = async () => {
     const res = await fetch('https://emotion-blog-production.up.railway.app/users/login', {
@@ -26,18 +31,81 @@ export default function LoginPage() {
     }
   };
 
+  const handleEmailIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmailId(e.target.value);
+    const domain = domainSelect === '직접 입력' ? customDomain : domainSelect;
+    setUsername(e.target.value && domain ? `${e.target.value}@${domain}` : '');
+  };
+
+  const handleDomainSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    setDomainSelect(value);
+    if (value === '직접 입력') {
+      setShowCustomDomain(true);
+      setCustomDomain('');
+      setUsername(emailId ? `${emailId}@` : '');
+    } else {
+      setShowCustomDomain(false);
+      setCustomDomain('');
+      setUsername(emailId && value ? `${emailId}@${value}` : '');
+    }
+  };
+
+  const handleCustomDomainChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCustomDomain(e.target.value);
+    setUsername(emailId && e.target.value ? `${emailId}@${e.target.value}` : '');
+  };
+
+  const handleCustomDomainBlur = () => {
+    if (!customDomain) {
+      setShowCustomDomain(false);
+      setDomainSelect('');
+      setUsername('');
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md space-y-6">
         <h2 className="text-2xl font-bold text-center">로그인</h2>
 
-        <input
-          type="text"
-          placeholder="아이디"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
+        {/* 이메일 아이디 + @ + 도메인 드롭다운/직접입력 */}
+        <div className="flex gap-2 mb-2">
+          <input
+            type="text"
+            placeholder="이메일 아이디"
+            value={emailId}
+            onChange={handleEmailIdChange}
+            className="w-[180px] border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+          <span className="self-center">@</span>
+          {showCustomDomain ? (
+            <input
+              type="text"
+              placeholder=" example.com"
+              value={customDomain}
+              onChange={handleCustomDomainChange}
+              onBlur={handleCustomDomainBlur}
+              autoFocus
+              className="w-[180px] border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          ) : (
+            <select
+              className="w-[180px] border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              value={domainSelect}
+              onChange={handleDomainSelect}
+            >
+              <option value="" disabled>
+                도메인 선택
+              </option>
+              {domainOptions.map((domain) => (
+                <option key={domain} value={domain}>
+                  {domain}
+                </option>
+              ))}
+            </select>
+          )}
+        </div>
 
         <input
           type="password"
