@@ -68,7 +68,7 @@ export default function PostDetailPage() {
         const data = await res.json();
         alert(data.message || '삭제 실패');
       }
-    } catch (err) {
+    } catch (_) {
       alert('서버 오류');
     }
   };

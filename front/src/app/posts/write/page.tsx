@@ -25,7 +25,7 @@ export default function PostWritePage() {
         const result = await res.json();
         alert(result.message || '작성 실패');
       }
-    } catch (err) {
+    } catch (_) {
       alert('서버 오류');
     }
   };
