@@ -49,15 +49,18 @@ public class UserService {
 
     //    로그인 로직
     public String login(LoginRequest request) {
+        System.out.println("🔑 로그인 요청: " + request.getUsername());
+
         Users user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("❌ 사용자가 존재하지 않습니다."));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw new IllegalArgumentException("❌ 비밀번호가 일치하지 않습니다.");
         }
 
         return jwtProvider.generateToken(user.getUsername());
     }
+
 
 //    탈퇴 로직
     @Transactional
