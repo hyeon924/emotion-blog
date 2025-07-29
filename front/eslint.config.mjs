@@ -9,13 +9,15 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
-const eslintConfig = [
+export default [
+  // 기존 next/typescript, next/core-web-vitals 규칙 불러오기
   ...compat.extends('next/core-web-vitals', 'next/typescript'),
+
+  // 사용자 지정 규칙 추가
   {
+    files: ['**/*.ts', '**/*.tsx'],
     rules: {
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     },
   },
 ];
-
-export default eslintConfig;
