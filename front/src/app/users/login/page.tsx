@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
@@ -12,6 +12,7 @@ export default function LoginPage() {
   const [customDomain, setCustomDomain] = useState('');
   const [showCustomDomain, setShowCustomDomain] = useState(false);
   const domainOptions = ['gmail.com', 'naver.com', 'daum.net', '직접 입력'];
+  const customDomainInputRef = useRef<HTMLInputElement>(null);
 
   const handleLogin = async () => {
     try {
@@ -56,13 +57,6 @@ export default function LoginPage() {
       setShowCustomDomain(true);
       setCustomDomain('');
       setUsername(emailId ? `${emailId}@` : '');
-      // 모바일에서 키보드가 안정적으로 나타나도록 약간의 지연 추가
-      setTimeout(() => {
-        const customDomainInput = document.getElementById('custom-domain-input');
-        if (customDomainInput) {
-          customDomainInput.focus();
-        }
-      }, 100);
     } else {
       setShowCustomDomain(false);
       setCustomDomain('');
@@ -75,13 +69,27 @@ export default function LoginPage() {
     setUsername(emailId && e.target.value ? `${emailId}@${e.target.value}` : '');
   };
 
-  const handleCustomDomainBlur = () => {
-    if (!customDomain) {
-      setShowCustomDomain(false);
-      setDomainSelect('');
-      setUsername('');
-    }
+  // 직접 입력 필드로 돌아가기 버튼
+  const handleBackToSelect = () => {
+    setShowCustomDomain(false);
+    setDomainSelect('');
+    setCustomDomain('');
+    setUsername('');
   };
+
+  // showCustomDomain이 true가 되면 포커스 설정
+  useEffect(() => {
+    if (showCustomDomain && customDomainInputRef.current) {
+      // 더 긴 지연 시간으로 시도
+      const timer = setTimeout(() => {
+        if (customDomainInputRef.current) {
+          customDomainInputRef.current.focus();
+        }
+      }, 300);
+
+      return () => clearTimeout(timer);
+    }
+  }, [showCustomDomain]);
 
   const handleSignupClick = () => {
     console.log('회원가입 버튼 클릭됨');
@@ -108,15 +116,23 @@ export default function LoginPage() {
             />
             <span className="self-center text-gray-500">@</span>
             {showCustomDomain ? (
-              <input
-                id="custom-domain-input"
-                type="text"
-                placeholder="example.com"
-                value={customDomain}
-                onChange={handleCustomDomainChange}
-                onBlur={handleCustomDomainBlur}
-                className="flex-1 min-w-0 border border-gray-300 rounded px-3 sm:px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm sm:text-base"
-              />
+              <div className="flex-1 flex gap-1">
+                <input
+                  ref={customDomainInputRef}
+                  type="text"
+                  placeholder="example.com"
+                  value={customDomain}
+                  onChange={handleCustomDomainChange}
+                  className="flex-1 min-w-0 border border-gray-300 rounded px-3 sm:px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm sm:text-base"
+                />
+                <button
+                  type="button"
+                  onClick={handleBackToSelect}
+                  className="px-2 py-2 text-gray-500 hover:text-gray-700 text-sm"
+                >
+                  ↩
+                </button>
+              </div>
             ) : (
               <select
                 className="flex-1 min-w-0 border border-gray-300 rounded px-3 sm:px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm sm:text-base"
