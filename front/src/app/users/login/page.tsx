@@ -14,20 +14,32 @@ export default function LoginPage() {
   const domainOptions = ['gmail.com', 'naver.com', 'daum.net', '직접 입력'];
 
   const handleLogin = async () => {
-    const res = await fetch('https://emotion-blog-production.up.railway.app/users/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password }),
-    });
+    try {
+      const res = await fetch('https://emotion-blog-production.up.railway.app/users/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
 
-    const result = await res.json();
-    console.log(result);
+      const result = await res.json();
+      console.log('로그인 응답:', result);
 
-    if (res.ok) {
-      localStorage.setItem('token', result.data);
-      router.push('/posts');
-    } else {
-      alert(result.message);
+      if (res.ok) {
+        localStorage.setItem('token', result.data);
+        console.log('토큰 저장됨:', result.data);
+        console.log('페이지 이동 시도...');
+
+        // 강제로 페이지 이동
+        window.location.href = '/posts';
+
+        // 또는 router.replace 사용
+        // router.replace('/posts');
+      } else {
+        alert(result.message);
+      }
+    } catch (error) {
+      console.error('로그인 에러:', error);
+      alert('로그인 중 오류가 발생했습니다.');
     }
   };
 
@@ -64,69 +76,82 @@ export default function LoginPage() {
     }
   };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md space-y-6">
-        <h2 className="text-2xl font-bold text-center">로그인</h2>
+  const handleSignupClick = () => {
+    console.log('회원가입 버튼 클릭됨');
+    router.push('/users/signup');
+  };
 
-        {/* 이메일 아이디 + @ + 도메인 드롭다운/직접입력 */}
-        <div className="flex gap-2 mb-2">
-          <input
-            type="text"
-            placeholder="이메일 아이디"
-            value={emailId}
-            onChange={handleEmailIdChange}
-            className="w-[180px] border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-          <span className="self-center">@</span>
-          {showCustomDomain ? (
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 py-8">
+      <div className="w-full max-w-md bg-white p-6 sm:p-8 rounded-lg shadow-md space-y-6">
+        <h2 className="text-xl sm:text-2xl font-bold text-center">로그인</h2>
+
+        {/* 이메일 입력 영역 */}
+        <div className="space-y-3">
+          <label className="block text-sm font-medium text-gray-700">이메일</label>
+
+          {/* 이메일 입력 필드들 - 모바일에서도 가로 배치 */}
+          <div className="flex gap-2">
             <input
               type="text"
-              placeholder=" example.com"
-              value={customDomain}
-              onChange={handleCustomDomainChange}
-              onBlur={handleCustomDomainBlur}
-              autoFocus
-              className="w-[180px] border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              placeholder="이메일 아이디"
+              value={emailId}
+              onChange={handleEmailIdChange}
+              className="flex-1 min-w-0 border border-gray-300 rounded px-3 sm:px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm sm:text-base"
             />
-          ) : (
-            <select
-              className="w-[180px] border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              value={domainSelect}
-              onChange={handleDomainSelect}
-            >
-              <option value="" disabled>
-                도메인 선택
-              </option>
-              {domainOptions.map((domain) => (
-                <option key={domain} value={domain}>
-                  {domain}
+            <span className="self-center text-gray-500">@</span>
+            {showCustomDomain ? (
+              <input
+                type="text"
+                placeholder="example.com"
+                value={customDomain}
+                onChange={handleCustomDomainChange}
+                onBlur={handleCustomDomainBlur}
+                autoFocus
+                className="flex-1 min-w-0 border border-gray-300 rounded px-3 sm:px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm sm:text-base"
+              />
+            ) : (
+              <select
+                className="flex-1 min-w-0 border border-gray-300 rounded px-3 sm:px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm sm:text-base"
+                value={domainSelect}
+                onChange={handleDomainSelect}
+              >
+                <option value="" disabled>
+                  도메인 선택
                 </option>
-              ))}
-            </select>
-          )}
+                {domainOptions.map((domain) => (
+                  <option key={domain} value={domain}>
+                    {domain}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
         </div>
 
-        <input
-          type="password"
-          placeholder="비밀번호"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
+        <div className="space-y-3">
+          <label className="block text-sm font-medium text-gray-700">비밀번호</label>
+          <input
+            type="password"
+            placeholder="비밀번호"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full border border-gray-300 rounded px-3 sm:px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm sm:text-base"
+          />
+        </div>
 
         <button
           onClick={handleLogin}
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded transition"
+          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 sm:py-3 rounded transition text-sm sm:text-base"
         >
           로그인
         </button>
 
         <div className="text-center">
-          <span className="text-gray-600">계정이 없으신가요?</span>
+          <span className="text-gray-600 text-sm sm:text-base">계정이 없으신가요?</span>
           <button
-            onClick={() => router.push('/users/signup')}
-            className="ml-2 text-blue-500 hover:underline"
+            onClick={handleSignupClick}
+            className="ml-2 text-blue-500 hover:underline text-sm sm:text-base"
           >
             회원가입
           </button>

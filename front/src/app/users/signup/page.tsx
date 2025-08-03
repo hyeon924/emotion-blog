@@ -100,52 +100,58 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="w-full max-w-lg bg-white p-8 rounded-xl shadow-lg space-y-6">
-        <h2 className="text-3xl font-bold text-center text-gray-800">회원가입</h2>
-        <p className="text-sm text-center text-gray-500">계정을 생성해보세요 🚀</p>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 py-8">
+      <div className="w-full max-w-lg bg-white p-6 sm:p-8 rounded-xl shadow-lg space-y-6">
+        <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-800">회원가입</h2>
+        <p className="text-xs sm:text-sm text-center text-gray-500">계정을 생성해보세요 🚀</p>
 
         <form onSubmit={handleSignup} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">이메일</label>
-            <div className="flex gap-2 mb-2 flex-nowrap w-full min-w-0 overflow-x-visible">
-              <input
-                type="text"
-                placeholder="이메일 아이디"
-                value={emailId}
-                onChange={handleEmailIdChange}
-                className="w-[180px] min-w-0 border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
-              />
-              <span className="self-center">@</span>
-              {showCustomDomain ? (
+            <label className="block text-sm font-medium text-gray-700 mb-2">이메일</label>
+
+            {/* 이메일 입력 영역 - 모바일에서도 가로 배치 */}
+            <div className="space-y-3">
+              <div className="flex gap-2">
                 <input
                   type="text"
-                  placeholder="example.com"
-                  value={customDomain}
-                  onChange={handleCustomDomainChange}
-                  onBlur={handleCustomDomainBlur}
-                  autoFocus
-                  className="w-[180px] min-w-0 border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+                  placeholder="이메일 아이디"
+                  value={emailId}
+                  onChange={handleEmailIdChange}
+                  className="flex-1 min-w-0 border border-gray-300 rounded px-3 sm:px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 text-sm sm:text-base"
                 />
-              ) : (
-                <select
-                  className="w-[180px] min-w-0 border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
-                  value={domainSelect}
-                  onChange={handleDomainSelect}
-                >
-                  <option value="" disabled>
-                    도메인 선택
-                  </option>
-                  {domainOptions.map((domain) => (
-                    <option key={domain} value={domain}>
-                      {domain}
+                <span className="self-center text-gray-500">@</span>
+                {showCustomDomain ? (
+                  <input
+                    type="text"
+                    placeholder="example.com"
+                    value={customDomain}
+                    onChange={handleCustomDomainChange}
+                    onBlur={handleCustomDomainBlur}
+                    autoFocus
+                    className="flex-1 min-w-0 border border-gray-300 rounded px-3 sm:px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 text-sm sm:text-base"
+                  />
+                ) : (
+                  <select
+                    className="flex-1 min-w-0 border border-gray-300 rounded px-3 sm:px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 text-sm sm:text-base"
+                    value={domainSelect}
+                    onChange={handleDomainSelect}
+                  >
+                    <option value="" disabled>
+                      도메인 선택
                     </option>
-                  ))}
-                </select>
-              )}
+                    {domainOptions.map((domain) => (
+                      <option key={domain} value={domain}>
+                        {domain}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
+
+              {/* 인증번호 받기 버튼 - 모바일에서는 전체 너비 */}
               <button
                 type="button"
-                className="bg-green-500 text-white text-sm px-4 py-2 rounded hover:bg-green-600 transition font-medium whitespace-nowrap flex-shrink-0 min-w-[110px]"
+                className="w-full sm:w-auto bg-green-500 text-white text-sm px-4 py-2 rounded hover:bg-green-600 transition font-medium whitespace-nowrap"
                 onClick={handleSendCode}
                 disabled={sendComplete}
               >
@@ -155,45 +161,42 @@ export default function SignupPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">인증번호</label>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                placeholder="인증번호를 입력하세요"
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-                className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
-              />
-            </div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">인증번호</label>
+            <input
+              type="text"
+              placeholder="인증번호를 입력하세요"
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              className="w-full border border-gray-300 rounded px-3 sm:px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 text-sm sm:text-base"
+            />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">닉네임</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">닉네임</label>
             <input
               type="text"
               placeholder="닉네임을 입력하세요"
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
-              className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+              className="w-full border border-gray-300 rounded px-3 sm:px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 text-sm sm:text-base"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">비밀번호</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">비밀번호</label>
             <input
               type="password"
               placeholder="비밀번호를 입력하세요"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+              className="w-full border border-gray-300 rounded px-3 sm:px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 text-sm sm:text-base"
             />
           </div>
 
-          <div className="flex justify-end mt-6">
+          <div className="flex justify-center sm:justify-end mt-6">
             <button
               type="submit"
-              className="bg-green-500 text-white text-base px-6 py-2 rounded hover:bg-green-600 transition font-semibold shadow"
-              style={{ minWidth: '120px' }}
+              className="w-full sm:w-auto bg-green-500 text-white text-sm sm:text-base px-6 py-2 sm:py-3 rounded hover:bg-green-600 transition font-semibold shadow"
             >
               회원가입
             </button>
@@ -203,7 +206,7 @@ export default function SignupPage() {
         </form>
 
         <div className="text-center">
-          <p className="text-sm text-gray-600">
+          <p className="text-xs sm:text-sm text-gray-600">
             이미 계정이 있으신가요?{' '}
             <button
               type="button"

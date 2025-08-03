@@ -100,28 +100,31 @@ export default function PostDetailPage() {
               : 'bg-gray-100 text-gray-800';
 
     return (
-      <div className={`px-4 py-2 rounded-full ${bgColor} font-semibold flex items-center gap-2`}>
-        <span className="text-lg">{emoji}</span>
+      <div
+        className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full ${bgColor} font-semibold flex items-center gap-1 sm:gap-2 text-sm sm:text-base`}
+      >
+        <span className="text-base sm:text-lg">{emoji}</span>
         <span>{emotion}</span>
       </div>
     );
   };
 
   if (error) {
-    return <div className="p-4 text-red-500">{error}</div>;
+    return <div className="p-4 text-red-500 text-sm sm:text-base">{error}</div>;
   }
 
   if (!post) {
-    return <div className="p-4">로딩 중...</div>;
+    return <div className="p-4 text-sm sm:text-base">로딩 중...</div>;
   }
 
   const isModified = post.createDate !== post.modifyDate;
 
   return (
-    <div className="max-w-4xl mx-auto mt-8 px-4">
-      <div className="bg-white rounded-lg shadow-lg p-8">
-        <div className="flex justify-between items-start mb-6">
-          <h1 className="text-3xl font-bold text-gray-800">{post.title}</h1>
+    <div className="max-w-4xl mx-auto mt-4 sm:mt-8 px-4 font-bmjua">
+      <div className="bg-white rounded-lg shadow-lg p-4 sm:p-8">
+        {/* 헤더 영역 - 모바일에서는 세로 배치 */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-start mb-4 sm:mb-6 gap-3">
+          <h1 className="text-xl sm:text-3xl font-bold text-gray-800 break-words">{post.title}</h1>
           {renderEmotion(post.emotion)}
         </div>
 
@@ -131,13 +134,13 @@ export default function PostDetailPage() {
           </p>
         </div> */}
 
-        <div className="bg-gray-50 rounded-lg p-6 mb-6">
-          <p className="whitespace-pre-wrap text-gray-800 leading-relaxed text-lg">
+        <div className="bg-gray-50 rounded-lg p-4 sm:p-6 mb-4 sm:mb-6">
+          <p className="whitespace-pre-wrap text-gray-800 leading-relaxed text-sm sm:text-lg">
             {post.content}
           </p>
         </div>
 
-        <div className="text-sm text-gray-500 space-y-2 border-t border-gray-100 pt-4">
+        <div className="text-xs sm:text-sm text-gray-500 space-y-2 border-t border-gray-100 pt-4">
           <p className="flex items-center gap-2">
             <span className="text-gray-400">📅</span>
             <span>작성일: {formatDate(post.createDate)}</span>
@@ -148,23 +151,24 @@ export default function PostDetailPage() {
           </p>
         </div>
 
-        <div className="mt-8 flex justify-between items-center">
+        {/* 버튼 영역 - 모바일에서는 세로 배치 */}
+        <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
           <button
             onClick={() => router.push('/posts')}
-            className="bg-gray-500 text-white px-5 py-2.5 rounded-lg hover:bg-gray-600 transition-colors flex items-center gap-2"
+            className="w-full sm:w-auto bg-gray-500 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg hover:bg-gray-600 transition-colors flex items-center justify-center gap-2 text-sm sm:text-base"
           >
             📋 목록으로
           </button>
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
             <button
               onClick={() => router.push(`/posts/${post.id}/edit`)}
-              className="bg-blue-500 text-white px-5 py-2.5 rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2"
+              className="w-full sm:w-auto bg-blue-500 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center gap-2 text-sm sm:text-base"
             >
               ✒️ 수정하기
             </button>
             <button
               onClick={handleDelete}
-              className="bg-red-500 text-white px-5 py-2.5 rounded-lg hover:bg-red-600 transition-colors flex items-center gap-2"
+              className="w-full sm:w-auto bg-red-500 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg hover:bg-red-600 transition-colors flex items-center justify-center gap-2 text-sm sm:text-base"
             >
               🗑️ 삭제하기
             </button>

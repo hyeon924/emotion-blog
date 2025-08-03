@@ -59,8 +59,8 @@ export default function PostEditPage() {
     }
   };
 
-  if (loading) return <div className="p-4">로딩 중...</div>;
-  if (error) return <div className="p-4 text-red-500">{error}</div>;
+  if (loading) return <div className="p-4 text-sm sm:text-base">로딩 중...</div>;
+  if (error) return <div className="p-4 text-red-500 text-sm sm:text-base">{error}</div>;
 
   return (
     <PostForm
