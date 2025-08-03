@@ -56,6 +56,13 @@ export default function LoginPage() {
       setShowCustomDomain(true);
       setCustomDomain('');
       setUsername(emailId ? `${emailId}@` : '');
+      // 모바일에서 키보드가 안정적으로 나타나도록 약간의 지연 추가
+      setTimeout(() => {
+        const customDomainInput = document.getElementById('custom-domain-input');
+        if (customDomainInput) {
+          customDomainInput.focus();
+        }
+      }, 100);
     } else {
       setShowCustomDomain(false);
       setCustomDomain('');
@@ -102,12 +109,12 @@ export default function LoginPage() {
             <span className="self-center text-gray-500">@</span>
             {showCustomDomain ? (
               <input
+                id="custom-domain-input"
                 type="text"
                 placeholder="example.com"
                 value={customDomain}
                 onChange={handleCustomDomainChange}
                 onBlur={handleCustomDomainBlur}
-                autoFocus
                 className="flex-1 min-w-0 border border-gray-300 rounded px-3 sm:px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm sm:text-base"
               />
             ) : (
